@@ -1,15 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
-import { KeyboardAvoidingView, Platform, StyleSheet, Text, View } from 'react-native';
-import AddTask from './components/AddTask';
 import ToDoList from './components/ToDoList';
+import { View } from 'react-native';
 
 
 function App() {
 
   return (
-    <div className='App'>
-      <ToDoList/>
-    </div>
+    <View>
+      <ToDoList initialValues={[]}/>
+    </View>
   );
 }
 

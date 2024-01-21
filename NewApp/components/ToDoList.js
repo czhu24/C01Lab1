@@ -1,46 +1,59 @@
 import React, { useState } from 'react';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import AddTask from './AddTask';
 
-function TodoList() {
-const [toDos, setToDos] = useState([]);
+function TodoList({initialValues}) {
+    const [toDos, setToDos] = useState(initialValues.map((initial) => ({id: uuidv4(), title: initial })));
 
-const [newTitle, setNewTitle] = useState('');
 
-function addToDo(e) {
-    e.preventDefault();
-    setToDos([...toDos, newTitle])
-    setNewTitle('')
+function addToDo(title) {
+    setToDos([...toDos, {id: uuidv4(), title: title}])
 }
 
 function removeToDo(id) {
-    const newToDos=[...toDos]
-    newToDos.splice(id, 1)
-    setToDos(newToDos)
-}
-
-function handleChange(e) {
-    setNewTitle(e.target.value);
+    setToDos(toDos.filter((toDo)=>toDo.id != id))
 }
 
 return (
-    <View>
-        <Text>To Do List</Text>
-        <form>
-            <input type="text" value={newTitle} onChange={handleChange}/>
-            <button onClick={addToDo}>Add Task</button>
-    </form>
-        <div>
-            {toDos.map((todo, id) => (
-                <li key={todo}>{todo}
-                <button onClick={() =>removeToDo(id)}>Delete</button>
-                </li>
+    <View style={styles.todoListContainer}>
+        <Text style={styles.Header}>To Do List</Text>
+
+        <AddTask onAddTask={addToDo}/>
+
+        <View>
+            {toDos.map((todo) => (
+                <View key = {todo.id} style={styles.todoItem}>
+                    <Text>{todo.title}</Text>
+                    <Button onPress={() =>removeToDo(todo.id)} title='Delete' />
+                </View>
             ))}
-        </div>
+        </View>
     </View>
  );
 }
 export default TodoList;
 
+const styles = StyleSheet.create({
+    todoListContainer: {
+      margin: 10,
+    },
+    todoItem: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: 10,
+      marginVertical: 5,
+      borderColor: 'gray',
+      borderWidth: 1,
+      borderRadius: 5,
+    },
+    Header: {
+        fontSize: 35,
+        fontWeight: 'bold',
+        fontFamily: 'monospace',
+    }
+});
 
 

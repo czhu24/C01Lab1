@@ -1,30 +1,36 @@
-import { TouchableOpacity } from 'react-native-web';
+import React, { useState } from 'react';
+import { View, TextInput, Button, StyleSheet } from 'react-native';
+
+function AddTask({onAddTask}) {
+
+    const [title, setNewTitle] = useState('');
+
+    function handleAddTask() {
+        if (title.trim() !== '') {
+            onAddTask(title)
+            setNewTitle('')
+        }
+    }
 
 
-import React from 'react';
-
-function AddTask() {
-
-const [toDos, setToDos] = useState([]);
-
-const [newTitle, setNewTitle] = useState('');
-
-function handleAddTask(e) {
-    e.preventDefault();
-    setToDos([...toDos, newTitle])
-    setNewTitle('')
-}
-
-function handleChange(e) {
-    setNewTitle(e.target.value);
-}
-
-
-return (
-    <View>
-        <input type="text" value={newTitle} onChange={handleChange}/>
-        <button onClick={handleAddTask}>Add Task To</button>
-    </View>
-);
+    return (
+        <View style={styles.addTodoForm}>
+            <TextInput value={title} onChangeText={(e) => setNewTitle(e)} style={styles.input}/>
+            <Button onPress={handleAddTask} title='Add Task' />
+        </View>
+    );
 }
 export default AddTask;
+
+const styles = StyleSheet.create({
+    addTodoForm: {
+      margin: 10,
+    },
+    input: {
+      height: 40,
+      borderColor: 'gray',
+      borderWidth: 1,
+      marginBottom: 10,
+      paddingHorizontal: 10,
+    },
+});
